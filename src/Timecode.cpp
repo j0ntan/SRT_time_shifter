@@ -1,6 +1,8 @@
 #include <Timecode.hpp>
 
 #include <stdexcept>
+#include <sstream>
+#include <iomanip>
 
 Timecode::Timecode(std::chrono::hours h, std::chrono::minutes m,
                    std::chrono::seconds s, std::chrono::milliseconds ms)
@@ -15,4 +17,16 @@ Timecode::Timecode(std::chrono::hours h, std::chrono::minutes m,
     {
         throw std::invalid_argument("Invalid time value");
     }
+}
+
+std::string Timecode::str() const
+{
+    std::ostringstream oss;
+    oss << std::setfill('0')
+        << std::setw(2) << HOURS.count() << ":"
+        << std::setw(2) << MINUTES.count() << ":"
+        << std::setw(2) << SECONDS.count() << ","
+        << std::setw(3) << MILLISECONDS.count();
+
+    return oss.str();
 }

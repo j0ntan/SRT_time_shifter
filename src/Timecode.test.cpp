@@ -80,3 +80,19 @@ TEST(TimecodeCtor, throwExceptionOnInvalidArguments)
     ASSERT_THROW((Timecode{0h, 0min, -1s, 0ms}), std::invalid_argument);
     ASSERT_THROW((Timecode{0h, 0min, 0s, -1ms}), std::invalid_argument);
 }
+
+TEST(TimecodeStr, convertToString)
+{
+    Timecode timecode;
+
+    std::string str = timecode.str();
+}
+
+TEST(TimecodeStr, matchStringFormat)
+{
+
+    Timecode timecode(1h, 2min, 3s, 4ms);
+    std::string expected = "01:02:03,004";
+
+    ASSERT_EQ(timecode.str(), expected);
+}

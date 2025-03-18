@@ -1,6 +1,7 @@
 #pragma once
 
 #include <chrono>
+#include <string>
 
 /**
  * @brief  @brief A timecode object that represents a time in hours, minutes,
@@ -34,6 +35,13 @@ public:
      */
     Timecode(std::chrono::hours h, std::chrono::minutes m,
              std::chrono::seconds s, std::chrono::milliseconds ms);
+
+    /**
+     * @brief Convert the timecode to a string representation
+     *
+     * @return std::string The timecode as a string
+     */
+    std::string str() const;
 
     ////////////////////////
     /// Member Variables ///
