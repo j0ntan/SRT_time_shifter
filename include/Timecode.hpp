@@ -69,3 +69,17 @@ public:
     static constexpr std::chrono::milliseconds MILLISECONDS_MIN{0};
     static constexpr std::chrono::milliseconds MILLISECONDS_MAX{999};
 };
+
+/**
+ * @brief Shift a timecode by the given time components
+ *
+ * @param timecode The timecode to shift
+ * @param h The number of hours to shift by
+ * @param m The number of minutes to shift by
+ * @param s The number of seconds to shift by
+ * @param ms The number of milliseconds to shift by
+ * @return Timecode The shifted timecode
+ */
+Timecode shift(const Timecode &timecode, std::chrono::hours h,
+               std::chrono::minutes m, std::chrono::seconds s,
+               std::chrono::milliseconds ms);

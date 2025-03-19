@@ -96,3 +96,48 @@ TEST(TimecodeStr, matchStringFormat)
 
     ASSERT_EQ(timecode.str(), expected);
 }
+
+TEST(shiftTimecode, getNewTimecodeResult)
+{
+    Timecode result = shift(Timecode(), 1h, 2min, 3s, 4ms);
+}
+
+TEST(shiftTimecode, increaseTimeComponents)
+{
+    Timecode result = shift(Timecode(), 1h, 2min, 3s, 4ms);
+
+    ASSERT_EQ(result.HOURS, 1h);
+    ASSERT_EQ(result.MINUTES, 2min);
+    ASSERT_EQ(result.SECONDS, 3s);
+    ASSERT_EQ(result.MILLISECONDS, 4ms);
+}
+
+TEST(shiftTimecode, decreaseTimeComponents)
+{
+    Timecode result = shift(Timecode(1h, 2min, 3s, 4ms), -1h, -2min, -3s, -4ms);
+
+    ASSERT_EQ(result.HOURS, 0h);
+    ASSERT_EQ(result.MINUTES, 0min);
+    ASSERT_EQ(result.SECONDS, 0s);
+    ASSERT_EQ(result.MILLISECONDS, 0ms);
+}
+
+TEST(shiftTimecode, increaseTimeWithOverflow)
+{
+    Timecode result = shift(Timecode(1h, 59min, 59s, 999ms), 0h, 1min, 1s, 1ms);
+
+    ASSERT_EQ(result.HOURS, 2h);
+    ASSERT_EQ(result.MINUTES, 1min);
+    ASSERT_EQ(result.SECONDS, 1s);
+    ASSERT_EQ(result.MILLISECONDS, 0ms);
+}
+
+TEST(shiftTimecode, decreaseTimeWithBorrow)
+{
+    Timecode result = shift(Timecode(1h, 0min, 0s, 0ms), 0h, -1min, -1s, -1ms);
+
+    ASSERT_EQ(result.HOURS, 0h);
+    ASSERT_EQ(result.MINUTES, 58min);
+    ASSERT_EQ(result.SECONDS, 58s);
+    ASSERT_EQ(result.MILLISECONDS, 999ms);
+}

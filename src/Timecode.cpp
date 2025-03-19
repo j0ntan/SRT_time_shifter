@@ -30,3 +30,40 @@ std::string Timecode::str() const
 
     return oss.str();
 }
+
+Timecode shift(const Timecode &timecode, std::chrono::hours h,
+               std::chrono::minutes m, std::chrono::seconds s,
+               std::chrono::milliseconds ms)
+{
+    using namespace std::chrono;
+
+    milliseconds result_ms = timecode.MILLISECONDS + ms;
+
+    seconds result_s = timecode.SECONDS + s + duration_cast<seconds>(result_ms);
+    result_ms %= milliseconds{1000};
+
+    minutes result_m = timecode.MINUTES + m + duration_cast<minutes>(result_s);
+    result_s %= seconds{60};
+
+    hours result_h = timecode.HOURS + h + duration_cast<hours>(result_m);
+    result_m %= minutes{60};
+
+    // borrow if necessary
+    if (result_ms < 0ms)
+    {
+        result_ms += 1000ms;
+        --result_s;
+    }
+    if (result_s < 0s)
+    {
+        result_s += 60s;
+        --result_m;
+    }
+    if (result_m < 0min)
+    {
+        result_m += 60min;
+        --result_h;
+    }
+
+    return Timecode(result_h, result_m, result_s, result_ms);
+}
