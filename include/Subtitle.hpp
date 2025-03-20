@@ -23,6 +23,8 @@ public:
     Subtitle(std::size_t sequence, Timecode start, Timecode end,
              std::string text);
 
+    std::string str() const;
+
     ////////////////////////
     /// Member Variables ///
     ////////////////////////

@@ -70,3 +70,28 @@ TEST(SubtitleCtor, startMustBeLessThanEnd)
     std::string text = "Once upon a time...";
     ASSERT_THROW(Subtitle(1, start, end, text), std::invalid_argument);
 }
+
+TEST(SubtitleString, convertToString)
+{
+    Timecode start(1h, 2min, 3s, 4ms), end(5h, 6min, 7s, 8ms);
+    std::string text = "Once upon a time...";
+    Subtitle subtitle(1, start, end, text);
+
+    std::string str = subtitle.str();
+}
+
+TEST(SubtitleString, matchFormattedString)
+{
+    Timecode start(1h, 2min, 3s, 4ms), end(5h, 6min, 7s, 8ms);
+    std::string text = "Once upon a time...\n";
+    Subtitle subtitle1(1, start, end, text), subtitle2(2, start, end, text);
+
+    std::string expected1 = "1\n"
+                            "01:02:03,004 --> 05:06:07,008\n"
+                            "Once upon a time...\n\n",
+                expected2 = "2\n"
+                            "01:02:03,004 --> 05:06:07,008\n"
+                            "Once upon a time...\n\n";
+    ASSERT_EQ(subtitle1.str(), expected1);
+    ASSERT_EQ(subtitle2.str(), expected2);
+}

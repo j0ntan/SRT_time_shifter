@@ -16,3 +16,9 @@ Subtitle::Subtitle(std::size_t sequence, Timecode start, Timecode end,
         throw std::invalid_argument("End time must be greater than start time");
     }
 }
+
+std::string Subtitle::str() const
+{
+    return std::to_string(SEQUENCE) + "\n" + START.str() + " --> " +
+           END.str() + "\n" + TEXT + "\n";
+}
