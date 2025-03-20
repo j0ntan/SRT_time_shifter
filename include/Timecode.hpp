@@ -71,6 +71,16 @@ public:
 };
 
 /**
+ * @brief Compare two timecodes for less-than ordering
+ *
+ * @param lhs The left-hand side timecode
+ * @param rhs The right-hand side timecode
+ * @return true if `lhs` is less than `rhs`
+ * @return false if `lhs` is greater than or equal to `rhs`
+ */
+bool operator<(const Timecode &lhs, const Timecode &rhs);
+
+/**
  * @brief Shift a timecode by the given time components
  *
  * @param timecode The timecode to shift

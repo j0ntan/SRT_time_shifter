@@ -31,6 +31,17 @@ std::string Timecode::str() const
     return oss.str();
 }
 
+bool operator<(const Timecode &lhs, const Timecode &rhs)
+{
+    return lhs.HOURS < rhs.HOURS ||
+           (lhs.HOURS == rhs.HOURS &&
+            (lhs.MINUTES < rhs.MINUTES ||
+             (lhs.MINUTES == rhs.MINUTES &&
+              (lhs.SECONDS < rhs.SECONDS ||
+               (lhs.SECONDS == rhs.SECONDS &&
+                lhs.MILLISECONDS < rhs.MILLISECONDS)))));
+}
+
 Timecode shift(const Timecode &timecode, std::chrono::hours h,
                std::chrono::minutes m, std::chrono::seconds s,
                std::chrono::milliseconds ms)

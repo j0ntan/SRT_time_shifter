@@ -141,3 +141,23 @@ TEST(shiftTimecode, decreaseTimeWithBorrow)
     ASSERT_EQ(result.SECONDS, 58s);
     ASSERT_EQ(result.MILLISECONDS, 999ms);
 }
+
+TEST(TimecodeLessThanCmp, callComparator)
+{
+    Timecode() < Timecode();
+}
+
+TEST(TimecodeLessThanCmp, compareTimeComponents)
+{
+    ASSERT_TRUE(Timecode(1h, 0min, 0s, 0ms) < Timecode(2h, 0min, 0s, 0ms));
+    ASSERT_FALSE(Timecode(2h, 0min, 0s, 0ms) < Timecode(1h, 0min, 0s, 0ms));
+
+    ASSERT_TRUE(Timecode(1h, 0min, 0s, 0ms) < Timecode(1h, 1min, 0s, 0ms));
+    ASSERT_FALSE(Timecode(1h, 1min, 0s, 0ms) < Timecode(1h, 0min, 0s, 0ms));
+
+    ASSERT_TRUE(Timecode(1h, 0min, 0s, 0ms) < Timecode(1h, 0min, 1s, 0ms));
+    ASSERT_FALSE(Timecode(1h, 0min, 1s, 0ms) < Timecode(1h, 0min, 0s, 0ms));
+
+    ASSERT_TRUE(Timecode(1h, 0min, 0s, 0ms) < Timecode(1h, 0min, 0s, 1ms));
+    ASSERT_FALSE(Timecode(1h, 0min, 0s, 1ms) < Timecode(1h, 0min, 0s, 0ms));
+}
