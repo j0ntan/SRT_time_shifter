@@ -16,14 +16,14 @@ bool operator==(const Timecode &lhs, const Timecode &rhs)
 TEST(SubtitleCtor, createInitialized)
 {
     Timecode start(1h, 2min, 3s, 4ms), end(5h, 6min, 7s, 8ms);
-    std::string text = "Once upon a time...";
+    std::string text = "Once upon a time...\n";
     Subtitle subtitle(1, start, end, text);
 }
 
 TEST(SubtitleAttributes, accessValues)
 {
     Timecode start(1h, 2min, 3s, 4ms), end(5h, 6min, 7s, 8ms);
-    std::string text = "Once upon a time...";
+    std::string text = "Once upon a time...\n";
     Subtitle subtitle(1, start, end, text);
 
     std::size_t sequence = subtitle.SEQUENCE;
@@ -35,7 +35,7 @@ TEST(SubtitleAttributes, accessValues)
 TEST(SubtitleAttributes, valuesAreConstant)
 {
     Timecode start(1h, 2min, 3s, 4ms), end(5h, 6min, 7s, 8ms);
-    std::string text = "Once upon a time...";
+    std::string text = "Once upon a time...\n";
     Subtitle subtitle(1, start, end, text);
 
     ASSERT_TRUE(std::is_const_v<decltype(subtitle.SEQUENCE)>);
@@ -48,7 +48,7 @@ TEST(SubtitleCtor, matchInitialValues)
 {
     std::size_t sequence = 123;
     Timecode start(1h, 2min, 3s, 4ms), end(5h, 6min, 7s, 8ms);
-    std::string text = "Once upon a time...";
+    std::string text = "Once upon a time...\n";
     Subtitle subtitle(sequence, start, end, text);
 
     ASSERT_EQ(subtitle.SEQUENCE, sequence);
@@ -60,21 +60,21 @@ TEST(SubtitleCtor, matchInitialValues)
 TEST(SubtitleCtor, sequenceMustBeGreaterThanZero)
 {
     Timecode start(1h, 2min, 3s, 4ms), end(5h, 6min, 7s, 8ms);
-    std::string text = "Once upon a time...";
+    std::string text = "Once upon a time...\n";
     ASSERT_THROW(Subtitle(0, start, end, text), std::invalid_argument);
 }
 
 TEST(SubtitleCtor, startMustBeLessThanEnd)
 {
     Timecode start(1h, 2min, 3s, 4ms), end(1h, 2min, 3s, 4ms);
-    std::string text = "Once upon a time...";
+    std::string text = "Once upon a time...\n";
     ASSERT_THROW(Subtitle(1, start, end, text), std::invalid_argument);
 }
 
 TEST(SubtitleString, convertToString)
 {
     Timecode start(1h, 2min, 3s, 4ms), end(5h, 6min, 7s, 8ms);
-    std::string text = "Once upon a time...";
+    std::string text = "Once upon a time...\n";
     Subtitle subtitle(1, start, end, text);
 
     std::string str = subtitle.str();
