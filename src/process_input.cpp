@@ -2,6 +2,8 @@
 
 #include <charconv>
 
+#include "timecode_str_identifier.hpp"
+
 using namespace std::chrono_literals;
 
 Timecode to_timecode(const std::string_view &str_v)
@@ -54,4 +56,18 @@ std::string shift_timecode_range_str(std::string_view timecode_range,
                                  sa.milliseconds);
 
     return shifted_start.str() + " --> " + shifted_end.str();
+}
+
+void process_input(ShiftAmount shift_amount, std::istringstream &in_stream, std::ostringstream &out_stream)
+
+{
+    std::string line;
+    while (std::getline(in_stream, line))
+    {
+        if (is_timecode_range_str(line))
+        {
+            line = shift_timecode_range_str(line, shift_amount);
+        }
+        out_stream << line << std::endl;
+    }
 }

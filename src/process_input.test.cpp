@@ -84,3 +84,58 @@ TEST(shift_timecode_range_str, shiftEndTimeByGivenAmount)
     ASSERT_EQ(shifted.size(), 29);
     ASSERT_EQ(end_time, expected);
 }
+
+TEST(processInput, callFunction)
+{
+    ShiftAmount sa;
+    std::istringstream iss;
+    std::ostringstream oss;
+    process_input(sa, iss, oss);
+}
+
+TEST(processInput, reachesEndOfInputStream)
+{
+    ShiftAmount sa{};
+    std::istringstream iss("1\n"
+                           "01:02:03,004 --> 05:06:07,008\n"
+                           "Once upon a time...\n\n");
+    std::ostringstream oss;
+    process_input(sa, iss, oss);
+
+    ASSERT_TRUE(iss.eof());
+}
+
+TEST(processInput, OutputMatchesInputForZeroShift)
+{
+    ShiftAmount sa{0h, 0min, 0s, 0ms};
+    std::string input_str("1\n"
+                          "01:02:03,004 --> 05:06:07,008\n"
+                          "Once upon a time...\n\n");
+    std::istringstream iss(input_str);
+    std::ostringstream oss;
+    process_input(sa, iss, oss);
+
+    ASSERT_EQ(oss.str(), input_str);
+}
+
+TEST(processInput, shiftTimesByGivenAmount)
+{
+    ShiftAmount sa{1h, 2min, 3s, 4ms};
+    std::string input("1\n"
+                      "01:02:03,004 --> 05:06:07,008\n"
+                      "Once upon a time...\n\n"
+                      "2\n"
+                      "06:07:08,009 --> 10:11:12,013\n"
+                      "In a land far away...\n\n"),
+        expected("1\n"
+                 "02:04:06,008 --> 06:08:10,012\n"
+                 "Once upon a time...\n\n"
+                 "2\n"
+                 "07:09:11,013 --> 11:13:15,017\n"
+                 "In a land far away...\n\n");
+    std::istringstream iss(input);
+    std::ostringstream oss;
+    process_input(sa, iss, oss);
+
+    ASSERT_EQ(oss.str(), expected);
+}

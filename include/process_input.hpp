@@ -3,6 +3,7 @@
 #include <string_view>
 #include <chrono>
 #include <string>
+#include <sstream>
 
 #include <Timecode.hpp>
 
@@ -37,3 +38,14 @@ struct ShiftAmount
  */
 std::string shift_timecode_range_str(std::string_view timecode_range,
                                      ShiftAmount sa);
+
+/**
+ * @brief Fills an output stream with the SRT text from an input stream with
+ * the timecodes shifted by the given amount
+ *
+ * @param shift_amount Time components used to shift the input timecodes
+ * @param in_stream Input stream containing subtitle text in SRT format
+ * @param out_stream Output stream containing the shifted timecodes
+ */
+void process_input(ShiftAmount shift_amount, std::istringstream &in_stream,
+                   std::ostringstream &out_stream);
