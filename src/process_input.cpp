@@ -37,3 +37,21 @@ Timecode to_timecode(const std::string_view &str_v)
                     std::chrono::seconds{seconds_val},
                     std::chrono::milliseconds{milliseconds_val});
 }
+
+std::string shift_timecode_range_str(std::string_view timecode_range,
+                                     ShiftAmount sa)
+{
+    const std::size_t START_POS = 0, END_POS = 17;
+    const std::size_t TIMECODE_LEN = 12;
+    Timecode start_time =
+                 to_timecode(timecode_range.substr(START_POS, TIMECODE_LEN)),
+             end_time =
+                 to_timecode(timecode_range.substr(END_POS, TIMECODE_LEN));
+
+    Timecode shifted_start = shift(start_time, sa.hours, sa.minutes,
+                                   sa.seconds, sa.milliseconds),
+             shifted_end = shift(end_time, sa.hours, sa.minutes, sa.seconds,
+                                 sa.milliseconds);
+
+    return shifted_start.str() + " --> " + shifted_end.str();
+}

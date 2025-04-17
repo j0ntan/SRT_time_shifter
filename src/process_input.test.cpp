@@ -33,3 +33,54 @@ TEST(to_timecode, matchMillisecondsValue)
     ASSERT_EQ(to_timecode("12:34:56:789").MILLISECONDS, 789ms);
     ASSERT_EQ(to_timecode("13:24:35,467").MILLISECONDS, 467ms);
 }
+
+TEST(ShiftAmount, createDefault)
+{
+    ShiftAmount sa;
+}
+
+TEST(ShiftAmount, accessMembers)
+{
+    ShiftAmount sa;
+    std::chrono::hours hours = sa.hours;
+    std::chrono::minutes minutes = sa.minutes;
+    std::chrono::seconds seconds = sa.seconds;
+    std::chrono::milliseconds milliseconds = sa.milliseconds;
+}
+
+TEST(shift_timecode_range_str, callFunction)
+{
+    std::string_view timecode_range_str("12:34:56,789 --> 13:24:35,467");
+    ShiftAmount sa{};
+    std::string shifted = shift_timecode_range_str(timecode_range_str, sa);
+}
+
+TEST(shift_timecode_range_str, shiftStartTimeByGivenAmount)
+{
+    std::string shifted = shift_timecode_range_str(
+        "12:34:56,789 --> 13:24:35,467", ShiftAmount{1h, 2min, 3s, 4ms});
+
+    std::string start_time = shifted.substr(0, 12), expected("13:36:59,793");
+    ASSERT_GE(shifted.size(), 12);
+    ASSERT_EQ(start_time, expected);
+}
+
+TEST(shift_time_range_str, matchArrowSeparator)
+{
+    std::string shifted = shift_timecode_range_str(
+        "12:34:56,789 --> 13:24:35,467", ShiftAmount{1h, 2min, 3s, 4ms});
+
+    ASSERT_GE(shifted.size(), 17);
+    ASSERT_EQ(shifted.substr(12, 5), " --> ");
+}
+
+TEST(shift_timecode_range_str, shiftEndTimeByGivenAmount)
+{
+    std::string shifted =
+        shift_timecode_range_str("12:34:56,789 --> 13:24:35,467",
+                                 ShiftAmount{1h, 2min, 3s, 4ms});
+
+    std::string end_time = shifted.substr(17, 12), expected("14:26:38,471");
+    ASSERT_EQ(shifted.size(), 29);
+    ASSERT_EQ(end_time, expected);
+}
