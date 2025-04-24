@@ -58,7 +58,8 @@ std::string shift_timecode_range_str(std::string_view timecode_range,
     return shifted_start.str() + " --> " + shifted_end.str();
 }
 
-void process_input(ShiftAmount shift_amount, std::istringstream &in_stream, std::ostringstream &out_stream)
+void process_input(ShiftAmount shift_amount, std::istream &in_stream,
+                   std::ostream &out_stream)
 
 {
     std::string line;

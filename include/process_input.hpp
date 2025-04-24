@@ -3,7 +3,8 @@
 #include <string_view>
 #include <chrono>
 #include <string>
-#include <sstream>
+#include <istream>
+#include <ostream>
 
 #include <Timecode.hpp>
 
@@ -47,5 +48,5 @@ std::string shift_timecode_range_str(std::string_view timecode_range,
  * @param in_stream Input stream containing subtitle text in SRT format
  * @param out_stream Output stream containing the shifted timecodes
  */
-void process_input(ShiftAmount shift_amount, std::istringstream &in_stream,
-                   std::ostringstream &out_stream);
+void process_input(ShiftAmount shift_amount, std::istream &in_stream,
+                   std::ostream &out_stream);

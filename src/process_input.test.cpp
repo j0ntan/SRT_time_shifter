@@ -139,3 +139,18 @@ TEST(processInput, shiftTimesByGivenAmount)
 
     ASSERT_EQ(oss.str(), expected);
 }
+
+TEST(processInput, useGeneralIOstreams)
+{
+    class MyInStream : public std::istream
+    {
+    };
+    class MyOutStream : public std::ostream
+    {
+    };
+
+    ShiftAmount sa{1h, 2min, 3s, 4ms};
+    MyInStream my_in;
+    MyOutStream my_out;
+    process_input(sa, my_in, my_out);
+}
