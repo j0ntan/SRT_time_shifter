@@ -23,3 +23,9 @@ FetchContent_MakeAvailable(GoogleTest)
 include(GoogleTest)
 
 add_subdirectory(src)
+
+configure_file(sample/sample.srt sample.srt COPYONLY)
+
+add_executable(main main.cc)
+target_link_libraries(main process_input)
+target_include_directories(main PRIVATE include)
