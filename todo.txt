@@ -1,4 +1,0 @@
-- accept the input/output file path from the command line arguments
-- add command line options
-- allow the option to overwrite the file on successful shift operation
-- improve error handling
